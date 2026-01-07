@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly VITE_APP_PREDICT_STREAM_FUNCTION_ARN: string;
   readonly VITE_APP_RAG_ENABLED: string;
   readonly VITE_APP_RAG_KNOWLEDGE_BASE_ENABLED: string;
+  readonly VITE_APP_RAG_S3_VECTORS_ENABLED: string;
+  readonly VITE_APP_S3_VECTORS_BUCKET_NAME: string;
   readonly VITE_APP_AGENT_ENABLED: string;
   readonly VITE_APP_FLOW_STREAM_FUNCTION_ARN: string;
   readonly VITE_APP_FLOWS: string;

@@ -13,6 +13,7 @@ import {
   McpApi,
   AgentCore,
 } from './construct';
+import { RagS3Vectors } from './construct/rag-s3-vectors';
 import { loadMCPConfig, extractSafeMCPConfig } from './utils/mcp-config-loader';
 import { CfnWebACLAssociation } from 'aws-cdk-lib/aws-wafv2';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
@@ -256,6 +257,8 @@ export class GenerativeAiUseCasesStack extends Stack {
       predictStreamFunctionArn: api.predictStreamFunction.functionArn,
       ragEnabled: params.ragEnabled,
       ragKnowledgeBaseEnabled: params.ragKnowledgeBaseEnabled,
+      ragS3VectorsEnabled: params.ragS3VectorsEnabled,
+      s3VectorsBucketName: params.s3VectorsBucketName,
       agentEnabled: params.agentEnabled || params.agents.length > 0,
       flows: params.flows,
       flowStreamFunctionArn: api.invokeFlowFunction.functionArn,
@@ -375,6 +378,26 @@ export class GenerativeAiUseCasesStack extends Stack {
             }
           );
         }
+      }
+    }
+
+    // RAG S3 Vectors
+    if (params.ragS3VectorsEnabled) {
+      const vectorBucketName = params.s3VectorsBucketName;
+      const vectorIndexName = params.s3VectorsIndexName;
+      
+      if (vectorBucketName && vectorIndexName) {
+        new RagS3Vectors(this, 'RagS3Vectors', {
+          modelRegion: params.modelRegion,
+          crossAccountBedrockRoleArn: params.crossAccountBedrockRoleArn,
+          embeddingModelId: params.s3VectorsEmbeddingModelId,
+          vectorBucketName: vectorBucketName,
+          vectorIndexName: vectorIndexName,
+          userPool: auth.userPool,
+          api: api.api,
+          vpc: props.vpc,
+          securityGroups,
+        });
       }
     }
 

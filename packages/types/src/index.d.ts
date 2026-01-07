@@ -12,6 +12,7 @@ export * from './useCaseBuilder';
 export * from './protocolUseCaseBuilder';
 export * from './model';
 export * from './rag-knowledge-base';
+export * from './rag-s3-vectors';
 export * from './useCases';
 export * from './share';
 export * from './speech-to-speech';

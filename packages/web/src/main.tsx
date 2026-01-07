@@ -21,6 +21,7 @@ import VideoAnalyzerPage from './pages/VideoAnalyzerPage';
 import NotFound from './pages/NotFound';
 import RagPage from './pages/RagPage';
 import RagKnowledgeBasePage from './pages/RagKnowledgeBasePage';
+import RagS3VectorsPage from './pages/RagS3VectorsPage';
 import WebContent from './pages/WebContent';
 import GenerateImagePage from './pages/GenerateImagePage';
 import GenerateVideoPage from './pages/GenerateVideoPage';
@@ -52,6 +53,8 @@ import { Toaster } from 'sonner';
 const ragEnabled: boolean = import.meta.env.VITE_APP_RAG_ENABLED === 'true';
 const ragKnowledgeBaseEnabled: boolean =
   import.meta.env.VITE_APP_RAG_KNOWLEDGE_BASE_ENABLED === 'true';
+const ragS3VectorsEnabled: boolean =
+  import.meta.env.VITE_APP_RAG_S3_VECTORS_ENABLED === 'true';
 const samlAuthEnabled: boolean =
   import.meta.env.VITE_APP_SAMLAUTH_ENABLED === 'true';
 const agentEnabled: boolean = import.meta.env.VITE_APP_AGENT_ENABLED === 'true';
@@ -181,6 +184,12 @@ const routes: RouteObject[] = [
     ? {
         path: '/rag-knowledge-base',
         element: <RagKnowledgeBasePage />,
+      }
+    : null,
+  ragS3VectorsEnabled
+    ? {
+        path: '/rag-s3-vectors',
+        element: <RagS3VectorsPage />,
       }
     : null,
   agentEnabled

@@ -41,6 +41,8 @@ import { useTranslation } from 'react-i18next';
 const ragEnabled: boolean = import.meta.env.VITE_APP_RAG_ENABLED === 'true';
 const ragKnowledgeBaseEnabled: boolean =
   import.meta.env.VITE_APP_RAG_KNOWLEDGE_BASE_ENABLED === 'true';
+const ragS3VectorsEnabled: boolean =
+  import.meta.env.VITE_APP_RAG_S3_VECTORS_ENABLED === 'true';
 const agentEnabled: boolean = import.meta.env.VITE_APP_AGENT_ENABLED === 'true';
 const inlineAgents: boolean = import.meta.env.VITE_APP_INLINE_AGENTS === 'true';
 const mcpEnabled: boolean = import.meta.env.VITE_APP_MCP_ENABLED === 'true';
@@ -112,6 +114,15 @@ const App: React.FC = () => {
           icon: <PiChatCircleText />,
           display: 'usecase' as const,
           sub: 'Knowledge Base',
+        }
+      : null,
+    ragS3VectorsEnabled
+      ? {
+          label: t('navigation.ragChat'),
+          to: '/rag-s3-vectors',
+          icon: <PiChatCircleText />,
+          display: 'usecase' as const,
+          sub: 'Amazon S3 Vectors',
         }
       : null,
     agentEnabled && !inlineAgents
