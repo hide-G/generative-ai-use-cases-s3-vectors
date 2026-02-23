@@ -34,6 +34,8 @@
     "embeddingModelId": "amazon.titan-embed-text-v2:0",
     "rerankingModelId": null,
     "queryDecompositionEnabled": false,
+    "ragS3VectorsEnabled": false,
+    "s3VectorsKnowledgeBaseId": null,
     "selfSignUpEnabled": true,
     "allowedSignUpEmailDomains": null,
     "samlAuthEnabled": false,

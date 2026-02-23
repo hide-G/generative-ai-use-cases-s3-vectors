@@ -48,6 +48,8 @@ import { useTranslation } from 'react-i18next';
 const ragEnabled: boolean = import.meta.env.VITE_APP_RAG_ENABLED === 'true';
 const ragKnowledgeBaseEnabled: boolean =
   import.meta.env.VITE_APP_RAG_KNOWLEDGE_BASE_ENABLED === 'true';
+const ragS3VectorsEnabled: boolean =
+  import.meta.env.VITE_APP_RAG_S3_VECTORS_ENABLED === 'true';
 const agentEnabled: boolean = import.meta.env.VITE_APP_AGENT_ENABLED === 'true';
 const agentCoreEnabled: boolean =
   import.meta.env.VITE_APP_AGENT_CORE_ENABLED === 'true';
@@ -108,6 +110,13 @@ const LandingPage: React.FC = () => {
       content: t('landing.demo.rag.content'),
     };
     navigate(`/rag-knowledge-base?${queryString.stringify(params)}`);
+  };
+
+  const demoRagS3Vectors = () => {
+    const params: RagPageQueryParams = {
+      content: t('landing.demo.rag.content'),
+    };
+    navigate(`/rag-s3-vectors?${queryString.stringify(params)}`);
   };
 
   const demoAgent = () => {
@@ -346,6 +355,15 @@ const LandingPage: React.FC = () => {
             onClickDemo={demoRagKnowledgeBase}
             icon={<PiChatCircleText />}
             description={t('landing.use_cases.rag_chat.description_kb')}
+          />
+        )}
+        {ragS3VectorsEnabled && (
+          <CardDemo
+            label={t('landing.use_cases.rag_chat.title')}
+            sub={t('landing.use_cases.rag_chat.sub_s3vectors')}
+            onClickDemo={demoRagS3Vectors}
+            icon={<PiChatCircleText />}
+            description={t('landing.use_cases.rag_chat.description_s3vectors')}
           />
         )}
         {agentEnabled && !inlineAgents && (

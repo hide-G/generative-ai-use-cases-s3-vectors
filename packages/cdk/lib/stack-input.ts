@@ -131,6 +131,9 @@ const baseStackInputSchema = z.object({
   ragKnowledgeBaseBinaryVector: z.boolean().default(false),
   queryDecompositionEnabled: z.boolean().default(false),
   rerankingModelId: z.string().nullish(),
+  // RAG S3 Vectors (via Knowledge Base)
+  ragS3VectorsEnabled: z.boolean().default(false),
+  s3VectorsKnowledgeBaseId: z.string().nullish(),
   // Agent
   agentEnabled: z.boolean().default(false),
   searchAgentEnabled: z.boolean().default(false),

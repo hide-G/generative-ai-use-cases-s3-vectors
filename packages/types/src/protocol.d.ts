@@ -133,6 +133,18 @@ export type RetrieveKnowledgeBaseRequest = {
 
 export type RetrieveKnowledgeBaseResponse = RetrieveCommandOutputKnowledgeBase;
 
+export type RetrieveS3VectorsRequest = {
+  query: string;
+};
+
+export type RetrieveS3VectorsResponse = {
+  vectors: Array<{
+    key: string;
+    distance?: number;
+    metadata?: Record<string, unknown>;
+  }>;
+};
+
 export type S3Type = 'default' | 'knowledgeBase' | 'agentcore';
 
 export type BucketInfo = {

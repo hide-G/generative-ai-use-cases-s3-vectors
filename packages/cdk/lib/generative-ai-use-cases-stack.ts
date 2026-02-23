@@ -13,6 +13,7 @@ import {
   McpApi,
   AgentCore,
 } from './construct';
+import { RagS3Vectors } from './construct/rag-s3-vectors';
 import { loadMCPConfig, extractSafeMCPConfig } from './utils/mcp-config-loader';
 import { CfnWebACLAssociation } from 'aws-cdk-lib/aws-wafv2';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
@@ -287,6 +288,7 @@ export class GenerativeAiUseCasesStack extends Stack {
       predictStreamFunctionArn: api.predictStreamFunction.functionArn,
       ragEnabled: params.ragEnabled,
       ragKnowledgeBaseEnabled: params.ragKnowledgeBaseEnabled,
+      ragS3VectorsEnabled: params.ragS3VectorsEnabled,
       agentEnabled: params.agentEnabled || params.agents.length > 0,
       flows: params.flows,
       flowStreamFunctionArn: api.invokeFlowFunction.functionArn,
@@ -412,6 +414,22 @@ export class GenerativeAiUseCasesStack extends Stack {
             }
           );
         }
+      }
+    }
+
+    // RAG S3 Vectors (Knowledge Base)
+    if (params.ragS3VectorsEnabled) {
+      const s3VectorsKnowledgeBaseId = params.s3VectorsKnowledgeBaseId;
+
+      if (s3VectorsKnowledgeBaseId) {
+        new RagS3Vectors(this, 'RagS3Vectors', {
+          modelRegion: params.modelRegion,
+          crossAccountBedrockRoleArn: params.crossAccountBedrockRoleArn,
+          s3VectorsKnowledgeBaseId: s3VectorsKnowledgeBaseId,
+          predictStreamFunction: api.predictStreamFunction,
+          vpc: props.vpc,
+          securityGroups,
+        });
       }
     }
 

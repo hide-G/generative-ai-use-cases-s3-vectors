@@ -20,15 +20,31 @@ const envs: Record<string, Partial<StackInput>> = {
   // '': {
   //   // Parameters for anonymous environment
   //   // If you want to override the default settings, add the following
+  //
+  //   // RAG S3 Vectors configuration example
+  //   // ragS3VectorsEnabled: true,
+  //   // s3VectorsKnowledgeBaseId: 'YOUR_KNOWLEDGE_BASE_ID',
   // },
   dev: {
     // Parameters for development environment
+    //
+    // RAG S3 Vectors configuration example
+    // ragS3VectorsEnabled: true,
+    // s3VectorsKnowledgeBaseId: 'DEV_KNOWLEDGE_BASE_ID',
   },
   staging: {
     // Parameters for staging environment
+    //
+    // RAG S3 Vectors configuration example
+    // ragS3VectorsEnabled: true,
+    // s3VectorsKnowledgeBaseId: 'STAGING_KNOWLEDGE_BASE_ID',
   },
   prod: {
     // Parameters for production environment
+    //
+    // RAG S3 Vectors configuration example
+    // ragS3VectorsEnabled: true,
+    // s3VectorsKnowledgeBaseId: 'PROD_KNOWLEDGE_BASE_ID',
   },
   // If you need other environments, customize them as needed
 };
