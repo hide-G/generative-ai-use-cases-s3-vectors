@@ -289,7 +289,6 @@ export class GenerativeAiUseCasesStack extends Stack {
       ragEnabled: params.ragEnabled,
       ragKnowledgeBaseEnabled: params.ragKnowledgeBaseEnabled,
       ragS3VectorsEnabled: params.ragS3VectorsEnabled,
-      s3VectorsBucketName: params.s3VectorsBucketName,
       agentEnabled: params.agentEnabled || params.agents.length > 0,
       flows: params.flows,
       flowStreamFunctionArn: api.invokeFlowFunction.functionArn,
@@ -418,20 +417,16 @@ export class GenerativeAiUseCasesStack extends Stack {
       }
     }
 
-    // RAG S3 Vectors
+    // RAG S3 Vectors (Knowledge Base)
     if (params.ragS3VectorsEnabled) {
-      const vectorBucketName = params.s3VectorsBucketName;
-      const vectorIndexName = params.s3VectorsIndexName;
-      
-      if (vectorBucketName && vectorIndexName) {
+      const s3VectorsKnowledgeBaseId = params.s3VectorsKnowledgeBaseId;
+
+      if (s3VectorsKnowledgeBaseId) {
         new RagS3Vectors(this, 'RagS3Vectors', {
           modelRegion: params.modelRegion,
           crossAccountBedrockRoleArn: params.crossAccountBedrockRoleArn,
-          embeddingModelId: params.s3VectorsEmbeddingModelId,
-          vectorBucketName: vectorBucketName,
-          vectorIndexName: vectorIndexName,
-          userPool: auth.userPool,
-          api: api.api,
+          s3VectorsKnowledgeBaseId: s3VectorsKnowledgeBaseId,
+          predictStreamFunction: api.predictStreamFunction,
           vpc: props.vpc,
           securityGroups,
         });

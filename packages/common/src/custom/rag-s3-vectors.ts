@@ -2,27 +2,27 @@ import { S3VectorFilterConfiguration } from 'generative-ai-use-cases';
 import { CognitoIdTokenPayload } from 'aws-jwt-verify/jwt-model';
 
 /*
- * このファイルはS3 Vectorsのフィルター設定を定義するために使用されます。
- * 必要に応じてフィルターのコメントアウトを解除し、ニーズに合わせてカスタマイズしてください。
+ * This file is used to define filter settings for S3 Vectors via Knowledge Base.
+ * Uncomment and customize filters as needed to match your document metadata.
  *
- * サンプルファイル（packages/cdk/rag-docs/docs）のmetadata.jsonを参照し、
- * それに応じてドキュメントメタデータを定義してください。
+ * Refer to the sample files (packages/cdk/rag-docs/docs) metadata.json
+ * and define your document metadata accordingly.
  */
 
-// 動的フィルター
-// ユーザー属性によって自動的に適用されるフィルター
-// ユーザー属性によって自動的に適用されるフィルターをここで定義します。
+// Dynamic filters
+// Filters automatically applied based on user attributes
+// Define filters that are automatically applied based on user attributes here.
 export const getDynamicS3VectorFilters = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _idTokenPayload: CognitoIdTokenPayload
 ): Record<string, any>[] => {
   const dynamicFilters: Record<string, any>[] = [];
 
-  // 例1: Cognitoユーザーグループによるフィルター
-  // Cognitoユーザーグループによってフィルターを適用
+  // Example 1: Filter by Cognito user groups
+  // Apply filters based on Cognito user groups
 
   // const groups = idTokenPayload['cognito:groups'];
-  // if (!groups) throw new Error('cognito:groups is not set'); // グループが設定されていない場合はアクセス不可でエラーを投げる
+  // if (!groups) throw new Error('cognito:groups is not set'); // Deny access if groups are not set
   // const groupFilter = {
   //   group: {
   //     in: groups,
@@ -30,15 +30,15 @@ export const getDynamicS3VectorFilters = (
   // };
   // dynamicFilters.push(groupFilter);
 
-  // 例2: SAML IdPグループカスタム属性によるフィルター（属性マッピングの設定手順はdocs/SAML_WITH_ENTRA_ID.mdを確認）
-  // SAML IdPグループカスタム属性によってフィルターを適用
-  // カスタム属性の設定方法についてはdocs/SAML_WITH_ENTRA_ID.mdを参照してください
+  // Example 2: Filter by SAML IdP group custom attribute (see docs/SAML_WITH_ENTRA_ID.md for attribute mapping setup)
+  // Apply filters based on SAML IdP group custom attribute
+  // Refer to docs/SAML_WITH_ENTRA_ID.md for custom attribute configuration
 
-  // const groups = (idTokenPayload['custom:idpGroup'] as string) // グループは文字列として保持される（例: [group1id, group2id]）
-  //   .slice(1, -1) // 最初と最後の括弧を削除
-  //   .split(/, ?/) // カンマとスペースで分割
-  //   .filter(Boolean); // 空文字列を削除
-  // if (!groups) throw new Error('custom:idpGroup is not set'); // グループが設定されていない場合はアクセス不可でエラーを投げる
+  // const groups = (idTokenPayload['custom:idpGroup'] as string) // Groups are stored as string (e.g., [group1id, group2id])
+  //   .slice(1, -1) // Remove first and last brackets
+  //   .split(/, ?/) // Split by comma and optional space
+  //   .filter(Boolean); // Remove empty strings
+  // if (!groups) throw new Error('custom:idpGroup is not set'); // Deny access if groups are not set
   // const groupFilter = {
   //   group: {
   //     in: groups,
@@ -49,39 +49,39 @@ export const getDynamicS3VectorFilters = (
   return dynamicFilters;
 };
 
-// 隠し静的明示的フィルター
-// ユーザーに表示されないフィルター（例：アプリケーションレベルの権限、プールテナント）
-// ユーザーに表示されないフィルターを定義します（例：アプリケーションレベルの権限、プールテナント）
+// Hidden static explicit filters
+// Filters not visible to users (e.g., application-level permissions, pool tenant)
+// Define filters not visible to users here (e.g., application-level permissions, pool tenant)
 export const hiddenStaticS3VectorFilters: Record<string, any>[] = [
-  // 例1: データ分類によるフィルター
+  // Example 1: Filter by data classification
   // {
   //   classification: {
   //     notIn: ['secret'],
   //   },
   // },
-  // 例2: テナントによるフィルター
+  // Example 2: Filter by tenant
   // {
   //   tenant: {
   //     equals: 'tenant1',
   //   },
   // },
-  // ここでカスタマイズ
+  // Customize here
 ];
 
-// ユーザー定義明示的フィルター
-// アプリケーション上でユーザーに表示されるフィルター
-// アプリケーション上でユーザーが選択できるフィルターを定義します
-// サンプルファイル（packages/cdk/rag-docs/docs）はそれに応じてmetadata.jsonを定義しています。
+// User-defined explicit filters
+// Filters visible to users in the application
+// Define filters that users can select in the application here
+// Sample files (packages/cdk/rag-docs/docs) define metadata.json accordingly.
 export const userDefinedS3VectorFilters: S3VectorFilterConfiguration[] = [
-  // 例1: カテゴリによるフィルター（文字列マッチ）
+  // Example 1: Filter by category (string match)
   {
     key: 'category',
     type: 'STRING',
     options: [{ value: 'AWS', label: 'AWS' }],
-    description: 'カテゴリ',
+    description: 'Category',
   },
 
-  // 例2: タグによるフィルター（文字列リスト）
+  // Example 2: Filter by tag (string list)
   {
     key: 'tag',
     type: 'STRING_LIST',
@@ -89,39 +89,39 @@ export const userDefinedS3VectorFilters: S3VectorFilterConfiguration[] = [
       { value: 'AWS', label: 'AWS' },
       { value: 'Amazon Bedrock', label: 'Amazon Bedrock' },
       { value: 'Amazon S3', label: 'Amazon S3' },
-      { value: 'Vector Search', label: 'ベクトル検索' },
+      { value: 'Vector Search', label: 'Vector Search' },
     ],
-    description: 'タグ',
+    description: 'Tag',
   },
 
-  // 例3: 年によるフィルター（数値）
+  // Example 3: Filter by year (number)
   {
     key: 'year',
     type: 'NUMBER',
-    description: '年',
+    description: 'Year',
   },
 
-  // 例4: 公開フラグによるフィルター（真偽値）
+  // Example 4: Filter by public flag (boolean)
   {
     key: 'is_public',
     type: 'BOOLEAN',
     options: [
-      { value: 'true', label: '公開' },
-      { value: 'false', label: '非公開' },
+      { value: 'true', label: 'Public' },
+      { value: 'false', label: 'Private' },
     ],
-    description: '公開状態',
+    description: 'Public Status',
   },
 
-  // 例5: 言語によるフィルター（文字列マッチ）
+  // Example 5: Filter by language (string match)
   {
     key: 'language',
     type: 'STRING',
     options: [
-      { value: 'en', label: '英語' },
-      { value: 'ja', label: '日本語' },
+      { value: 'en', label: 'English' },
+      { value: 'ja', label: 'Japanese' },
     ],
-    description: '言語',
+    description: 'Language',
   },
 
-  // ここでカスタマイズ
+  // Customize here
 ];

@@ -197,6 +197,7 @@ common:
   not_selected: Not selected
   optional: Optional
   other: Other
+  plus: +
   previous: Previous
   previous_page: Previous page
   remove: Remove
@@ -744,8 +745,14 @@ landing:
         information access. By generating responses based on reference documents
         retrieved from Amazon Kendra, it is easy to realize an "LLM chat that
         corresponds to internal information".
+      description_s3vectors: >-
+        RAG (Retrieval Augmented Generation) is a method that combines
+        information retrieval and LLM text generation, enabling effective
+        information access. Reference documents are retrieved using Amazon S3
+        Vectors' high-performance vector search, and the LLM generates responses.
       sub_kb: Knowledge Base
       sub_kendra: Amazon Kendra
+      sub_s3vectors: Amazon S3 Vectors
       title: RAG Chat
     summarize:
       description: >-
@@ -964,6 +971,17 @@ rag:
   page: page
   please_refer: .
   retrieving: Retrieving reference documents from Kendra...
+  s3vectors:
+    can_add_filters: .
+    config_file_path: packages/common/src/custom/rag-s3-vectors.ts
+    description: Chat with your documents using Amazon S3 Vectors for semantic search
+    filter: Filter
+    filter_config_reference: For filter configuration, please refer to
+    here: here
+    no_config_found: 'No filter configuration found. You can add filters by customizing '
+    performance: Optimized for high-performance vector search and retrieval
+    please_refer: .
+    title: RAG Chat (Amazon S3 Vectors)
   title: RAG Chat
 research:
   description: Conducts various research tasks across industries using web search and creates detailed research reports.

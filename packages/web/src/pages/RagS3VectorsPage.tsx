@@ -14,31 +14,48 @@ import queryString from 'query-string';
 import { getPrompter } from '../prompts';
 import ExpandableField from '../components/ExpandableField';
 import { userDefinedS3VectorFilters } from '@generative-ai-use-cases/common';
-import { S3VectorFilterConfiguration, ExtraData } from 'generative-ai-use-cases';
+import {
+  S3VectorFilterConfiguration,
+  ExtraData,
+} from 'generative-ai-use-cases';
 import { Option, SelectValue } from '../components/FilterSelect';
 import ModalDialog from '../components/ModalDialog';
 import Button from '../components/Button';
 import { useTranslation } from 'react-i18next';
-import KbFilter from '../components/KbFilter';
+import KbFilter, { RetrievalFilterLabel } from '../components/KbFilter';
 
-// S3 Vectorsアイコン用のSVGコンポーネント（仮）
+// SVG component for S3 Vectors icon (temporary)
 const S3VectorsIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg className={className} viewBox="0 0 64 64" fill="currentColor">
-    <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" strokeWidth="2" fill="none"/>
-    <circle cx="20" cy="28" r="3" fill="currentColor"/>
-    <circle cx="32" cy="36" r="3" fill="currentColor"/>
-    <circle cx="44" cy="28" r="3" fill="currentColor"/>
-    <path d="M20 28 L32 36 L44 28" stroke="currentColor" strokeWidth="1" fill="none"/>
+    <rect
+      x="8"
+      y="16"
+      width="48"
+      height="32"
+      rx="4"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+    />
+    <circle cx="20" cy="28" r="3" fill="currentColor" />
+    <circle cx="32" cy="36" r="3" fill="currentColor" />
+    <circle cx="44" cy="28" r="3" fill="currentColor" />
+    <path
+      d="M20 28 L32 36 L44 28"
+      stroke="currentColor"
+      strokeWidth="1"
+      fill="none"
+    />
   </svg>
 );
 
 type StateType = {
   sessionId: string | undefined;
   content: string;
-  filters: (Record<string, any> | null)[];
+  filters: (RetrievalFilterLabel | null)[];
   setSessionId: (c: string | undefined) => void;
   setContent: (c: string) => void;
-  setFilters: (f: (Record<string, any> | null)[]) => void;
+  setFilters: (f: (RetrievalFilterLabel | null)[]) => void;
 };
 
 const useRagS3VectorsPageState = create<StateType>((set) => {
@@ -56,7 +73,7 @@ const useRagS3VectorsPageState = create<StateType>((set) => {
         content: s,
       }));
     },
-    setFilters: (f: (Record<string, any> | null)[]) => {
+    setFilters: (f: (RetrievalFilterLabel | null)[]) => {
       set(() => ({
         filters: f,
       }));
@@ -65,7 +82,7 @@ const useRagS3VectorsPageState = create<StateType>((set) => {
 });
 
 /**
- * S3 Vectors RAGチャットページコンポーネント
+ * S3 Vectors RAG chat page component
  */
 const RagS3VectorsPage: React.FC = () => {
   const { t } = useTranslation();
@@ -95,13 +112,13 @@ const RagS3VectorsPage: React.FC = () => {
 
   const [showSetting, setShowSetting] = useState(false);
 
-  // フィルターをS3 Vectors形式に変換する関数
+  // Function to convert filters to S3 Vectors format
   const convertFilterToS3VectorFormat = (
-    f: Record<string, any> | null,
+    f: RetrievalFilterLabel | null,
     filterConfig: S3VectorFilterConfiguration
-  ): Record<string, any> | null => {
+  ): Record<string, unknown> | null => {
     if (f === null) return null;
-    
+
     const selectValueToValue = (
       selectValue: SelectValue,
       filterConfig: S3VectorFilterConfiguration
@@ -124,12 +141,22 @@ const RagS3VectorsPage: React.FC = () => {
       return null;
     };
 
-    return Object.entries(f).map(([key, filterAttributeLabel]) => ({
-      [key]: {
+    // Get the first non-null filter operator and its value
+    const activeOperator = Object.keys(f).find(
+      (key) => f[key as keyof RetrievalFilterLabel]?.value !== null
+    ) as keyof RetrievalFilterLabel;
+
+    if (!activeOperator) return null;
+
+    const filterAttributeLabel = f[activeOperator];
+    if (!filterAttributeLabel) return null;
+
+    return {
+      [activeOperator]: {
         key: filterAttributeLabel.key,
         value: selectValueToValue(filterAttributeLabel.value, filterConfig),
       },
-    }))[0] as unknown as Record<string, any>;
+    };
   };
 
   useEffect(() => {
@@ -156,15 +183,14 @@ const RagS3VectorsPage: React.FC = () => {
   const getExtraDataFromFilters = useCallback(() => {
     return filters
       .map((f, index) =>
-        convertFilterToS3VectorFormat(
-          f,
-          userDefinedS3VectorFilters[index]
-        )
+        convertFilterToS3VectorFormat(f, userDefinedS3VectorFilters[index])
       )
       .filter(
-        (f: Record<string, any> | null) =>
+        (f: Record<string, unknown> | null) =>
           f !== null &&
-          Object.values(f).filter((v) => v.value != null).length > 0
+          Object.values(f).filter(
+            (v) => (v as Record<string, unknown>).value != null
+          ).length > 0
       )
       .map(
         (f) =>
@@ -182,7 +208,7 @@ const RagS3VectorsPage: React.FC = () => {
 
   const onSend = useCallback(() => {
     setFollowing(true);
-    // フィルターがある場合はextraDataに追加
+    // Add extraData if filters exist
     const extraData: ExtraData[] = getExtraDataFromFilters();
     postChat(
       content,
@@ -192,7 +218,7 @@ const RagS3VectorsPage: React.FC = () => {
       sessionId,
       undefined,
       extraData,
-      's3Vectors', // S3 Vectors用のAPIタイプ
+      's3Vectors', // API type for S3 Vectors
       setSessionId
     );
     setContent('');
@@ -254,7 +280,7 @@ const RagS3VectorsPage: React.FC = () => {
     <>
       <div className={`${!isEmpty ? 'screen:pb-48' : ''} relative`}>
         <div className="invisible my-0 flex h-0 items-center justify-center text-xl font-semibold lg:visible lg:my-5 lg:h-min print:visible print:my-5 print:h-min">
-          RAG チャット (Amazon S3 Vectors)
+          {t('rag.s3vectors.title')}
         </div>
 
         <div className="mt-2 flex w-full items-end justify-center lg:mt-0">
@@ -271,12 +297,12 @@ const RagS3VectorsPage: React.FC = () => {
           <div className="relative flex h-[calc(100vh-9rem)] flex-col items-center justify-center">
             <div className="flex items-center gap-x-3">
               <S3VectorsIcon className="size-[64px] fill-gray-400" />
-              <span className="text-2xl text-gray-400">+</span>
+              <span className="text-2xl text-gray-400">{t('common.plus')}</span>
               <BedrockIcon className="fill-gray-400" />
             </div>
             <div className="mt-4 text-center text-gray-500">
-              <p>Amazon S3 Vectors（GA版）を使用したセマンティック検索</p>
-              <p className="text-sm">最大20億ベクトル、100ミリ秒以下のレスポンス</p>
+              <p>{t('rag.s3vectors.description')}</p>
+              <p className="text-sm">{t('rag.s3vectors.performance')}</p>
             </div>
           </div>
         )}
@@ -335,19 +361,19 @@ const RagS3VectorsPage: React.FC = () => {
         title={t('chat.advanced_options')}>
         {userDefinedS3VectorFilters.length > 0 && (
           <ExpandableField
-            label="S3 Vectorsフィルター"
+            label={t('rag.s3vectors.filter')}
             className="relative w-full"
             defaultOpened={true}>
             <div className="flex justify-end">
               <div>
-                フィルター設定は{' '}
+                {t('rag.s3vectors.filter_config_reference')}{' '}
                 <a
                   className="text-aws-smile underline"
                   href="https://github.com/aws-samples/generative-ai-use-cases/blob/main/packages/common/src/custom/rag-s3-vectors.ts"
                   target="_blank">
-                  こちら
+                  {t('rag.s3vectors.here')}
                 </a>{' '}
-                を参照してください
+                {t('rag.s3vectors.please_refer')}
               </div>
             </div>
 
@@ -360,14 +386,14 @@ const RagS3VectorsPage: React.FC = () => {
         )}
         {userDefinedS3VectorFilters.length === 0 && (
           <p>
-            設定が見つかりません。{' '}
+            {t('rag.s3vectors.no_config_found')}{' '}
             <a
               className="text-aws-smile underline"
               href="https://github.com/aws-samples/generative-ai-use-cases/blob/main/packages/common/src/custom/rag-s3-vectors.ts"
               target="_blank">
-              packages/common/src/custom/rag-s3-vectors.ts
+              {t('rag.s3vectors.config_file_path')}
             </a>{' '}
-            でフィルターを追加できます。
+            {t('rag.s3vectors.can_add_filters')}
           </p>
         )}
         <div className="mt-4 flex justify-end">

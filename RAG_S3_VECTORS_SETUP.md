@@ -24,6 +24,7 @@ Amazon S3 Vectorsは、ベクトルデータを格納し、セマンティック
 ### 1. S3 Vectorsリソースの作成
 
 #### ベクトルバケットの作成
+
 ```bash
 # AWS CLIを使用してベクトルバケットを作成
 aws s3vectors create-vector-bucket \
@@ -32,6 +33,7 @@ aws s3vectors create-vector-bucket \
 ```
 
 #### ベクトルインデックスの作成
+
 ```bash
 # ベクトルインデックスを作成（GA版の新しいパラメータを使用）
 aws s3vectors create-index \
@@ -61,6 +63,7 @@ aws s3vectors create-index \
 ### 3. ベクトルデータの準備
 
 #### サンプルドキュメントの埋め込み生成
+
 ```python
 import boto3
 import json

@@ -133,38 +133,16 @@ export type RetrieveKnowledgeBaseRequest = {
 
 export type RetrieveKnowledgeBaseResponse = RetrieveCommandOutputKnowledgeBase;
 
-export type QueryS3VectorsRequest = {
-  query: string;
-  filter?: Record<string, any>;
-  topK?: number;
-  returnDistance?: boolean;
-  returnMetadata?: boolean;
-};
-
-export type QueryS3VectorsResponse = {
-  vectors: Array<{
-    key: string;
-    distance?: number;
-    metadata?: Record<string, any>;
-    data?: number[];
-  }>;
-  distanceMetric?: string;
-};
-
 export type RetrieveS3VectorsRequest = {
   query: string;
-  filter?: Record<string, any>;
-  topK?: number;
 };
 
 export type RetrieveS3VectorsResponse = {
   vectors: Array<{
     key: string;
     distance?: number;
-    metadata?: Record<string, any>;
-    data?: number[];
+    metadata?: Record<string, unknown>;
   }>;
-  distanceMetric?: string;
 };
 
 export type S3Type = 'default' | 'knowledgeBase' | 'agentcore';

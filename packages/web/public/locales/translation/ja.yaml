@@ -186,6 +186,7 @@ common:
   not_selected: 選択されていません
   optional: 任意
   other: その他
+  plus: +
   previous: 前
   previous_page: 前のページ
   remove: 削除
@@ -604,8 +605,13 @@ landing:
         RAG (Retrieval Augmented Generation) は、情報の検索と LLM
         の文章生成を組み合わせる手法のことで、効果的な情報アクセスを実現できます。 Amazon Kendra から取得した参考ドキュメントをベースに
         LLM が回答を生成してくれるため、「社内情報に対応した LLM チャット」を簡単に実現することが可能です。
+      description_s3vectors: >-
+        RAG (Retrieval Augmented Generation) は、情報の検索と LLM
+        の文章生成を組み合わせる手法のことで、効果的な情報アクセスを実現できます。 Amazon S3 Vectors
+        の高性能ベクトル検索を利用して参考ドキュメントを取得し、LLM が回答を生成します。
       sub_kb: Knowledge Base
       sub_kendra: Amazon Kendra
+      sub_s3vectors: Amazon S3 Vectors
       title: RAG チャット
     summarize:
       description: >-
@@ -791,6 +797,17 @@ rag:
   page: ページ
   please_refer: をご参照ください。
   retrieving: Kendra から参考ドキュメントを取得しています...
+  s3vectors:
+    can_add_filters: をカスタマイズすることでフィルターを追加できます。
+    config_file_path: packages/common/src/custom/rag-s3-vectors.ts
+    description: Amazon S3 Vectorsを使用してセマンティック検索でドキュメントとチャット
+    filter: フィルタ
+    filter_config_reference: フィルター設定については
+    here: こちら
+    no_config_found: フィルター設定が見つかりませんでした。
+    performance: 高性能なベクトル検索と取得に最適化
+    please_refer: をご参照ください。
+    title: RAG チャット (Amazon S3 Vectors)
   title: RAG チャット
 research:
   description: 業種・業界問わず様々なリサーチタスクを Web 検索を駆使して実施し、詳細な調査レポートを作成します。
