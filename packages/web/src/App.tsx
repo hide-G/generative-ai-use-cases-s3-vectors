@@ -23,6 +23,7 @@ import {
   PiTreeStructure,
   PiNotebook,
   PiGraph,
+  PiMagnifyingGlass,
 } from 'react-icons/pi';
 import { Outlet } from 'react-router-dom';
 import Drawer, { ItemProps } from './components/Drawer';
@@ -50,6 +51,8 @@ const agentCoreEnabled: boolean =
   import.meta.env.VITE_APP_AGENT_CORE_ENABLED === 'true';
 const agentBuilderEnabled: boolean =
   import.meta.env.VITE_APP_AGENT_CORE_AGENT_BUILDER_ENABLED === 'true';
+const researchAgentEnabled: boolean =
+  import.meta.env.VITE_APP_RESEARCH_AGENT_ENABLED === 'true';
 
 const {
   visionEnabled,
@@ -167,6 +170,15 @@ const App: React.FC = () => {
           label: 'Agent Builder',
           to: '/agent-builder',
           icon: <PiRobot />,
+          display: 'usecase' as const,
+          sub: 'Experimental',
+        }
+      : null,
+    researchAgentEnabled
+      ? {
+          label: t('research.label'),
+          to: '/research',
+          icon: <PiMagnifyingGlass />,
           display: 'usecase' as const,
           sub: 'Experimental',
         }
