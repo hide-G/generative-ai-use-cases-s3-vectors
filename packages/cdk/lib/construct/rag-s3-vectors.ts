@@ -12,6 +12,9 @@ export interface RagS3VectorsProps {
   // Knowledge Base ID for S3 Vectors
   readonly s3VectorsKnowledgeBaseId: string;
 
+  // S3 bucket name for Knowledge Base data source (optional, for PDF download access)
+  readonly s3VectorsDataSourceBucketName?: string;
+
   // Existing predictStreamFunction to add environment variables and permissions
   readonly predictStreamFunction: NodejsFunction;
 

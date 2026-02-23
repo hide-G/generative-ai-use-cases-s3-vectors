@@ -134,6 +134,7 @@ const baseStackInputSchema = z.object({
   // RAG S3 Vectors (via Knowledge Base)
   ragS3VectorsEnabled: z.boolean().default(false),
   s3VectorsKnowledgeBaseId: z.string().nullish(),
+  s3VectorsDataSourceBucketName: z.string().nullish(),
   // Agent
   agentEnabled: z.boolean().default(false),
   searchAgentEnabled: z.boolean().default(false),
